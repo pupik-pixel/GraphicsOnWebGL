@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>3D in WebGL!</title>
+<meta charset="utf-8" />
+</head>
+<body style = 'min-width:1280px;min-height: 720px;'>
+<canvas style = "float:left;border: 3px solid black;" id="canvas3D" width = '800' height="600">Ваш браузер не поддерживает элемент canvas</canvas>
+<div style = 'float:right;margin:0 1% 0 0;width:26%;'>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color1' style = "height:20px;width:20px;background-color: blue;" onclick="fun2(this)"></button><input type = checkbox id = 'check1' checked><span>z = </span><input type = text id = 'text' value = 'x**2 + y**2'></p>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color2' style = "height:20px;width:20px;background-color: red;" onclick="fun2(this)"></button><input type = checkbox id = 'check2'><span>z = </span><input type = text id = 'text2' value = 'Math.sin(x)'></p>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color3' style = "height:20px;width:20px;background-color: green;" onclick="fun2(this)"></button><input type = checkbox id = 'check3'><span>z = </span><input type = text id = 'text3' value = 'x*y'></p>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color4' style = "height:20px;width:20px;background-color: yellow;" onclick="fun2(this)"></button><input type = checkbox id = 'check4'><span>z = </span><input type = text id = 'text4' value = 'Math.sin(x)*Math.cos(y)'></p>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color5' style = "height:20px;width:20px;background-color: magenta;" onclick="fun2(this)"></button><input type = checkbox id = 'check5'><span>z = </span><input type = text id = 'text5' value = 'x**2 * y**2 + 2'></p>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color6' style = "height:20px;width:20px;background-color: cyan;" onclick="fun2(this)"></button><input type = checkbox id = 'check6'><span>z = </span><input type = text id = 'text6'></p>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color7' style = "height:20px;width:20px;background-color: white;" onclick="fun2(this)"></button><input type = checkbox id = 'check7'><span>z = </span><input type = text id = 'text7'></p>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color8' style = "height:20px;width:20px;background-color: blue;" onclick="fun2(this)"></button><input type = checkbox id = 'check8'><span>z = </span><input type = text id = 'text8'></p>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color9' style = "height:20px;width:20px;background-color: red;" onclick="fun2(this)"></button><input type = checkbox id = 'check9'><span>z = </span><input type = text id = 'text9'></p>
+<p align = right style = 'margin: 0 0 -0.3% 0;'><button id = 'color10' style = "height:20px;width:20px;background-color: black;" onclick="fun2(this)"></button><input type = checkbox id = 'check10'><span>z = </span><input type = text id = 'text10'></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'><span>ось z: minimum </span><input oninput = 'objectsChanged(this)' type = number id = 'zMinimum' style = 'width:12%;' value = -10><span> maximum </span><input oninput = 'objectsChanged(this)' type = number id = 'zMaximum' style = 'width:12%;' value = 10></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'><span>ось x: minimum </span><input oninput = 'objectsChanged(this)' type = number id = 'xMinimum' style = 'width:12%;' value = -10><span> maximum </span><input oninput = 'objectsChanged(this)' type = number id = 'xMaximum' style = 'width:12%;' value = 10></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'><span>ось y: minimum </span><input oninput = 'objectsChanged(this)' type = number id = 'yMinimum' style = 'width:12%;' value = -10><span> maximum </span><input oninput = 'objectsChanged(this)' type = number id = 'yMaximum' style = 'width:12%;' value = 10></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'><button id = 'color11' style = "height:20px;width:20px;background-color: white;" onclick="fun2(this)"></button><span>цвет фона</span></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'><span> стрелки </span><input id = 'arrowChecked' type = checkbox onchange="changeBool(this)" checked><span> цвет стрелок </span><button id = 'color12' style = "height:20px;width:20px;background-color: black;" onclick="fun2(this)"></button></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'><span>анимация </span><input id = 'animBool' type = checkbox onchange="changeBool(this)" checked><span> скорость анимации </span><input oninput = 'objectsChanged(this)' id = 'speedAnim' style = 'width:13%;' type = number  value = 1.0></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'><button id = 'resultGrafx' onclick="fun1()">вывести результат</button> <a id = "linkJpg" download="Image.jpg" href = '' onclick="saveAsJPG(this)">сохранить в формате jpeg</a></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'>Приблизить/отдалить: <input type="range" min="1" max="100" id="size" 
+    oninput="sizeCanvas()" value="25"></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'>Высота: <input type="range" min="1" max="100" id="sizeHeight" 
+        oninput="sizeCanvasHeight()" value="50"></p>
+<p align = right style = 'margin: 1% 0 1% 1%;'>Вращение по X: <input type="range" min="1" max="100" id="rotX" 
+        oninput="rotateCanvasX()" value="50"></p>    
+<p align = right style = 'margin: 1% 0 1% 1%;'>Вращение по Y: <input type="range" min="1" max="100" id="rotY" 
+        oninput="rotateCanvasY()" value="50"></p>        
+        </div>
+<script  type="text/javascript" src="gl-matrix-min.js"></script>
+<script type="text/javascript" src="script1.js"></script>
+<script id="shader-fs" type="x-shader/x-fragment">
+    varying lowp vec4 vColor;
+  void main(void) {
+    gl_FragColor = vColor;
+  }
+</script>
+ 
+<script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec3 aVertexPosition;
+    attribute vec4 aVertexColor;
+    varying lowp vec4 vColor;
+     uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    void main(void) {
+       gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+       vColor = vec4(aVertexColor);
+    }
+</script>
+ 
+<script type="text/javascript" src = 'webgl.js'></script>
+</body>
+</html>
