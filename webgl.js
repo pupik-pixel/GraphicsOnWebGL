@@ -7,7 +7,9 @@ var angle = 2.0;//угол вращения в радианах
 var angle2 = 0.0;//угол вращения в радианах
 var zTranslation = -25.0; // смещение по оси Z
 var yTranslation = 0.0; // смещение по оси Z
- 
+var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame; 
+let requestAnimationID;
+
 var mvMatrix = mat4.create(); 
 var pMatrix = mat4.create();
  
@@ -269,7 +271,10 @@ function setupWebGL()
     mat4.rotate(mvMatrix,mvMatrix, angle2, [0, 0, 1]);  
 }
   
-function fun1(){
+function fun1(){    
+    if (requestAnimationID) {
+        cancelAnimationFrame(requestAnimationID);
+    }
     formula = [null,null,null,null,null,null,null,null,null,null];
     if(document.getElementById('check1').checked == true) formula[0] = document.getElementById('text').value;
     if(document.getElementById('check2').checked == true) formula[1] = document.getElementById('text2').value;
@@ -301,15 +306,17 @@ document.addEventListener('keydown', handleKeyDown, false);
          
         initBuffers();
         // функция анимации
-        (function animloop(){
-            setupWebGL();
-            setMatrixUniforms();
-            draw(); 
-          requestAnimFrame(animloop, canvas);
-        })();
-          
+        animloop();        
     }
 }
+
+function animloop(){
+    setupWebGL();
+    setMatrixUniforms();
+    draw(); 
+    requestAnimationID = requestAnimFrame(animloop, canvas);
+}
+
 function handleKeyDown(e){
     switch(e.keyCode)
     {
@@ -348,7 +355,7 @@ function sizeCanvasHeight()
         yTranslation = -size;
     }
 // настройка анимации
-window.requestAnimFrame = (function(){
+ window.requestAnimFrame = (function(){
       return  window.requestAnimationFrame       || 
               window.webkitRequestAnimationFrame || 
               window.mozRequestAnimationFrame    || 
